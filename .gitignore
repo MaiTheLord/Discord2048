@@ -1,5 +1,7 @@
 .gradle/
 build/
 
+config.local.yml
+
 .idea/
 *.iml

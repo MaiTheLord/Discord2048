@@ -1,0 +1,7 @@
+# *******************************************************************
+# Copy this file's contents into config.local.yml, and edit it to your needs
+# *******************************************************************
+
+token: BOT-TOKEN-HERE
+
+adminId: ADMIN-ID-HERE
