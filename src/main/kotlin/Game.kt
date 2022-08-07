@@ -94,25 +94,28 @@ class Board {
                 for (row in 0..3) {
                     for (column in 0..3) {
                         if (tiles[row][column] != Tile.NONE) {
-                            for (newRow in 0 until row) {
-                                if (tiles[newRow][column] == Tile.NONE) {
-                                    tiles[newRow][column] = tiles[row][column]
-                                    tiles[row][column] = Tile.NONE
-                                    haveMoved = true
+                            var bestRow = null as Int?
+
+                            for (newRow in row - 1 downTo 0) {
+                                if (tiles[newRow][column] == Tile.NONE || tiles[newRow][column] == tiles[row][column]) {
+                                    bestRow = newRow
+                                } else {
                                     break
                                 }
                             }
-                        }
-                    }
-                }
 
-                for (row in 0..2) {
-                    for (column in 0..3) {
-                        if (tiles[row][column] != Tile.NONE && tiles[row][column] == tiles[row + 1][column]) {
-                            tiles[row][column] = Tile.from(tiles[row][column].value + 1)
-                            tiles[row + 1][column] = Tile.NONE
-                            haveMoved = true
-                            addScore(tiles[row][column].value)
+                            if (bestRow != null) {
+                                if (tiles[bestRow][column] == Tile.NONE) {
+                                    tiles[bestRow][column] = tiles[row][column]
+                                    tiles[row][column] = Tile.NONE
+                                    haveMoved = true
+                                } else {
+                                    tiles[bestRow][column] = Tile.from(tiles[bestRow][column].value + 1)
+                                    tiles[row][column] = Tile.NONE
+                                    addScore(tiles[bestRow][column].value)
+                                    haveMoved = true
+                                }
+                            }
                         }
                     }
                 }
@@ -121,25 +124,28 @@ class Board {
                 for (row in 3 downTo 0) {
                     for (column in 0..3) {
                         if (tiles[row][column] != Tile.NONE) {
-                            for (newRow in 3 downTo row) {
-                                if (tiles[newRow][column] == Tile.NONE) {
-                                    tiles[newRow][column] = tiles[row][column]
-                                    tiles[row][column] = Tile.NONE
-                                    haveMoved = true
+                            var bestRow = null as Int?
+
+                            for (newRow in row + 1..3) {
+                                if (tiles[newRow][column] == Tile.NONE || tiles[newRow][column] == tiles[row][column]) {
+                                    bestRow = newRow
+                                } else {
                                     break
                                 }
                             }
-                        }
-                    }
-                }
 
-                for (row in 3 downTo 1) {
-                    for (column in 0..3) {
-                        if (tiles[row][column] != Tile.NONE && tiles[row][column] == tiles[row - 1][column]) {
-                            tiles[row][column] = Tile.from(tiles[row][column].value + 1)
-                            tiles[row - 1][column] = Tile.NONE
-                            haveMoved = true
-                            addScore(tiles[row][column].value)
+                            if (bestRow != null) {
+                                if (tiles[bestRow][column] == Tile.NONE) {
+                                    tiles[bestRow][column] = tiles[row][column]
+                                    tiles[row][column] = Tile.NONE
+                                    haveMoved = true
+                                } else {
+                                    tiles[bestRow][column] = Tile.from(tiles[bestRow][column].value + 1)
+                                    tiles[row][column] = Tile.NONE
+                                    addScore(tiles[bestRow][column].value)
+                                    haveMoved = true
+                                }
+                            }
                         }
                     }
                 }
@@ -148,25 +154,28 @@ class Board {
                 for (column in 0..3) {
                     for (row in 0..3) {
                         if (tiles[row][column] != Tile.NONE) {
-                            for (newColumn in 0 until column) {
-                                if (tiles[row][newColumn] == Tile.NONE) {
-                                    tiles[row][newColumn] = tiles[row][column]
-                                    tiles[row][column] = Tile.NONE
-                                    haveMoved = true
+                            var bestColumn = null as Int?
+
+                            for (newColumn in column - 1 downTo 0) {
+                                if (tiles[row][newColumn] == Tile.NONE || tiles[row][newColumn] == tiles[row][column]) {
+                                    bestColumn = newColumn
+                                } else {
                                     break
                                 }
                             }
-                        }
-                    }
-                }
 
-                for (column in 0..2) {
-                    for (row in 0..3) {
-                        if (tiles[row][column] != Tile.NONE && tiles[row][column] == tiles[row][column + 1]) {
-                            tiles[row][column] = Tile.from(tiles[row][column].value + 1)
-                            tiles[row][column + 1] = Tile.NONE
-                            haveMoved = true
-                            addScore(tiles[row][column].value)
+                            if (bestColumn != null) {
+                                if (tiles[row][bestColumn] == Tile.NONE) {
+                                    tiles[row][bestColumn] = tiles[row][column]
+                                    tiles[row][column] = Tile.NONE
+                                    haveMoved = true
+                                } else {
+                                    tiles[row][bestColumn] = Tile.from(tiles[row][bestColumn].value + 1)
+                                    tiles[row][column] = Tile.NONE
+                                    addScore(tiles[row][bestColumn].value)
+                                    haveMoved = true
+                                }
+                            }
                         }
                     }
                 }
@@ -175,25 +184,28 @@ class Board {
                 for (column in 3 downTo 0) {
                     for (row in 0..3) {
                         if (tiles[row][column] != Tile.NONE) {
-                            for (newColumn in 3 downTo column) {
-                                if (tiles[row][newColumn] == Tile.NONE) {
-                                    tiles[row][newColumn] = tiles[row][column]
-                                    tiles[row][column] = Tile.NONE
-                                    haveMoved = true
+                            var bestColumn = null as Int?
+
+                            for (newColumn in column + 1..3) {
+                                if (tiles[row][newColumn] == Tile.NONE || tiles[row][newColumn] == tiles[row][column]) {
+                                    bestColumn = newColumn
+                                } else {
                                     break
                                 }
                             }
-                        }
-                    }
-                }
 
-                for (column in 3 downTo 1) {
-                    for (row in 0..3) {
-                        if (tiles[row][column] != Tile.NONE && tiles[row][column] == tiles[row][column - 1]) {
-                            tiles[row][column] = Tile.from(tiles[row][column].value + 1)
-                            tiles[row][column - 1] = Tile.NONE
-                            haveMoved = true
-                            addScore(tiles[row][column].value)
+                            if (bestColumn != null) {
+                                if (tiles[row][bestColumn] == Tile.NONE) {
+                                    tiles[row][bestColumn] = tiles[row][column]
+                                    tiles[row][column] = Tile.NONE
+                                    haveMoved = true
+                                } else {
+                                    tiles[row][bestColumn] = Tile.from(tiles[row][bestColumn].value + 1)
+                                    tiles[row][column] = Tile.NONE
+                                    addScore(tiles[row][bestColumn].value)
+                                    haveMoved = true
+                                }
+                            }
                         }
                     }
                 }
