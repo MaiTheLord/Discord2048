@@ -2,6 +2,8 @@
 # Copy this file's contents into config.local.yml, and edit it to your needs
 # *******************************************************************
 
-token: BOT-TOKEN-HERE
+# The bot token
+TOKEN: BOT-TOKEN-HERE
 
-adminId: ADMIN-ID-HERE
+# The ID of the discord user that'll be able to reload the bot's slash commands
+ADMIN_ID: ADMIN-ID-HERE

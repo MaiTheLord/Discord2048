@@ -4,14 +4,17 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import java.io.File
 
 object Config {
-    val token get() = properties.token
-    val adminId get() = properties.adminId
+    val token by lazy { prop("TOKEN") }
+    val adminId by lazy { prop("ADMIN_ID") }
 
-    private data class Properties(val token: String, val adminId: String)
+    private val yaml by lazy {
+        val file = File("config.local.yml")
 
-    private val properties: Properties by lazy {
-        ObjectMapper(YAMLFactory())
-            .registerKotlinModule()
-            .readValue(File("config.local.yml"), Properties::class.java)
+        if (file.exists()) ObjectMapper(YAMLFactory()).registerKotlinModule().readValue(file, Map::class.java)
+        else null
+    }
+
+    private fun prop(name: String): String {
+        return yaml?.get(name) as String? ?: System.getenv(name) ?: throw IllegalStateException("\"$name\" is not set")
     }
 }
