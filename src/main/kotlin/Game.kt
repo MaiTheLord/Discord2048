@@ -213,10 +213,9 @@ class Board {
         }
 
         if (haveMoved) {
-            incrementTurns()
-
             if (tiles.any { it.any { tile -> tile == Tile.TEN } }) {
                 onWon()
+                return
             }
 
             addToRandomTile()
@@ -244,8 +243,13 @@ class Board {
                     if (!isStuck) break
                 }
 
-                if (isStuck) onLost()
+                if (isStuck) {
+                    onLost()
+                    return
+                }
             }
+
+            incrementTurns()
         }
     }
 
