@@ -30,7 +30,7 @@ object ChannelManager : ListenerAdapter() {
             if (threads[event.guild!!]!!.contains(event.user)) {
                 val thread = threads[event.guild!!]!![event.user]!!
 
-                if (thread.isArchived && !games[thread]!!.first.isOver) {
+                if (!thread.isArchived && !games[thread]!!.first.isOver) {
                     if (event.channel.asTextChannel().threadChannels.contains(thread)) {
                         event
                             .reply("You already have a game in progress! <#${thread.id}>")
