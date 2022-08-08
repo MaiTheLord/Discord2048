@@ -16,6 +16,6 @@ object Config {
     }
 
     private fun prop(name: String): String? {
-        return yaml?.get(name).toString() as String? ?: System.getenv(name)
+        return yaml?.get(name)?.toString() ?: System.getenv(name)
     }
 }
