@@ -7,3 +7,6 @@ TOKEN: BOT-TOKEN-HERE
 
 # The ID of the discord user that'll be able to reload the bot's slash commands
 ADMIN_ID: ADMIN-ID-HERE
+
+# A link to add the bot to a server. Optional.
+INVITE_LINK: https://discord.com/api/oauth2/authorize?client_id=1005157924492030092&permissions=395405502482&scope=bot%20applications.commands

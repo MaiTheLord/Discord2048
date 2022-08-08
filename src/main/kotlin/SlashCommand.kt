@@ -8,7 +8,8 @@ import net.dv8tion.jda.api.requests.RestAction
 
 private val commands: ArrayList<SlashCommand> by lazy {
     arrayListOf(
-        SetupCommand
+        SetupCommand,
+        InviteCommand
     )
 }
 

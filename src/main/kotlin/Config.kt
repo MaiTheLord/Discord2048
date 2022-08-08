@@ -4,8 +4,9 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import java.io.File
 
 object Config {
-    val token by lazy { prop("TOKEN") }
-    val adminId by lazy { prop("ADMIN_ID") }
+    val token by lazy { prop("TOKEN")!! }
+    val adminId by lazy { prop("ADMIN_ID")!! }
+    val inviteLink by lazy { prop("INVITE_LINK") }
 
     private val yaml by lazy {
         val file = File("config.local.yml")
@@ -14,7 +15,7 @@ object Config {
         else null
     }
 
-    private fun prop(name: String): String {
-        return yaml?.get(name) as String? ?: System.getenv(name) ?: throw IllegalStateException("\"$name\" is not set")
+    private fun prop(name: String): String? {
+        return yaml?.get(name).toString() as String? ?: System.getenv(name)
     }
 }
