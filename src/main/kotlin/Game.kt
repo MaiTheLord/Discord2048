@@ -2,7 +2,6 @@ import net.dv8tion.jda.api.MessageBuilder
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.ThreadChannel
 import net.dv8tion.jda.api.entities.User
-import net.dv8tion.jda.api.interactions.callbacks.IReplyCallback
 import net.dv8tion.jda.api.interactions.components.ActionRow
 import net.dv8tion.jda.api.interactions.components.buttons.Button
 import kotlin.math.pow
@@ -79,222 +78,222 @@ class Game(thread: ThreadChannel, user: User) {
 
         return message.build()
     }
-}
 
-class Board {
-    val tiles = Array(4) { Array(4) { Tile.NONE } }
+    private class Board {
+        val tiles = Array(4) { Array(4) { Tile.NONE } }
 
-    init {
-        repeat(2) {
-            addToRandomTile()
-        }
-    }
-
-    fun move(direction: Direction, addScore: (Int) -> Unit, incrementTurns: () -> Unit, onWon: () -> Unit, onLost: () -> Unit) {
-        var haveMoved = false
-
-        when (direction) {
-            Direction.UP -> {
-                for (row in 0..3) {
-                    for (column in 0..3) {
-                        if (tiles[row][column] != Tile.NONE) {
-                            var bestRow = null as Int?
-
-                            for (newRow in row - 1 downTo 0) {
-                                if (tiles[newRow][column] == Tile.NONE || tiles[newRow][column] == tiles[row][column]) {
-                                    bestRow = newRow
-                                } else {
-                                    break
-                                }
-                            }
-
-                            if (bestRow != null) {
-                                if (tiles[bestRow][column] == Tile.NONE) {
-                                    tiles[bestRow][column] = tiles[row][column]
-                                    tiles[row][column] = Tile.NONE
-                                    haveMoved = true
-                                } else {
-                                    tiles[bestRow][column] = Tile.from(tiles[bestRow][column].value + 1)
-                                    tiles[row][column] = Tile.NONE
-                                    addScore(tiles[bestRow][column].value)
-                                    haveMoved = true
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            Direction.DOWN -> {
-                for (row in 3 downTo 0) {
-                    for (column in 0..3) {
-                        if (tiles[row][column] != Tile.NONE) {
-                            var bestRow = null as Int?
-
-                            for (newRow in row + 1..3) {
-                                if (tiles[newRow][column] == Tile.NONE || tiles[newRow][column] == tiles[row][column]) {
-                                    bestRow = newRow
-                                } else {
-                                    break
-                                }
-                            }
-
-                            if (bestRow != null) {
-                                if (tiles[bestRow][column] == Tile.NONE) {
-                                    tiles[bestRow][column] = tiles[row][column]
-                                    tiles[row][column] = Tile.NONE
-                                    haveMoved = true
-                                } else {
-                                    tiles[bestRow][column] = Tile.from(tiles[bestRow][column].value + 1)
-                                    tiles[row][column] = Tile.NONE
-                                    addScore(tiles[bestRow][column].value)
-                                    haveMoved = true
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            Direction.LEFT -> {
-                for (column in 0..3) {
-                    for (row in 0..3) {
-                        if (tiles[row][column] != Tile.NONE) {
-                            var bestColumn = null as Int?
-
-                            for (newColumn in column - 1 downTo 0) {
-                                if (tiles[row][newColumn] == Tile.NONE || tiles[row][newColumn] == tiles[row][column]) {
-                                    bestColumn = newColumn
-                                } else {
-                                    break
-                                }
-                            }
-
-                            if (bestColumn != null) {
-                                if (tiles[row][bestColumn] == Tile.NONE) {
-                                    tiles[row][bestColumn] = tiles[row][column]
-                                    tiles[row][column] = Tile.NONE
-                                    haveMoved = true
-                                } else {
-                                    tiles[row][bestColumn] = Tile.from(tiles[row][bestColumn].value + 1)
-                                    tiles[row][column] = Tile.NONE
-                                    addScore(tiles[row][bestColumn].value)
-                                    haveMoved = true
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            Direction.RIGHT -> {
-                for (column in 3 downTo 0) {
-                    for (row in 0..3) {
-                        if (tiles[row][column] != Tile.NONE) {
-                            var bestColumn = null as Int?
-
-                            for (newColumn in column + 1..3) {
-                                if (tiles[row][newColumn] == Tile.NONE || tiles[row][newColumn] == tiles[row][column]) {
-                                    bestColumn = newColumn
-                                } else {
-                                    break
-                                }
-                            }
-
-                            if (bestColumn != null) {
-                                if (tiles[row][bestColumn] == Tile.NONE) {
-                                    tiles[row][bestColumn] = tiles[row][column]
-                                    tiles[row][column] = Tile.NONE
-                                    haveMoved = true
-                                } else {
-                                    tiles[row][bestColumn] = Tile.from(tiles[row][bestColumn].value + 1)
-                                    tiles[row][column] = Tile.NONE
-                                    addScore(tiles[row][bestColumn].value)
-                                    haveMoved = true
-                                }
-                            }
-                        }
-                    }
-                }
+        init {
+            repeat(2) {
+                addToRandomTile()
             }
         }
 
-        if (haveMoved) {
-            if (tiles.any { it.any { tile -> tile == Tile.TEN } }) {
-                onWon()
-                return
-            }
+        fun move(direction: Direction, addScore: (Int) -> Unit, incrementTurns: () -> Unit, onWon: () -> Unit, onLost: () -> Unit) {
+            var haveMoved = false
 
-            addToRandomTile()
+            when (direction) {
+                Direction.UP -> {
+                    for (row in 0..3) {
+                        for (column in 0..3) {
+                            if (tiles[row][column] != Tile.NONE) {
+                                var bestRow = null as Int?
 
-            if (tiles.flatten().none { it == Tile.NONE}) {
-                var isStuck = true
+                                for (newRow in row - 1 downTo 0) {
+                                    if (tiles[newRow][column] == Tile.NONE || tiles[newRow][column] == tiles[row][column]) {
+                                        bestRow = newRow
+                                    } else {
+                                        break
+                                    }
+                                }
 
-                for (x in 0..3) {
-                    for (y in 0..3) {
-                        if (x < 3) {
-                            if (tiles[x][y] == tiles[x + 1][y]) {
-                                isStuck = false
-                                break
-                            }
-                        }
-
-                        if (y < 3) {
-                            if (tiles[x][y] == tiles[x][y + 1]) {
-                                isStuck = false
-                                break
+                                if (bestRow != null) {
+                                    if (tiles[bestRow][column] == Tile.NONE) {
+                                        tiles[bestRow][column] = tiles[row][column]
+                                        tiles[row][column] = Tile.NONE
+                                        haveMoved = true
+                                    } else {
+                                        tiles[bestRow][column] = Tile.from(tiles[bestRow][column].value + 1)
+                                        tiles[row][column] = Tile.NONE
+                                        addScore(tiles[bestRow][column].value)
+                                        haveMoved = true
+                                    }
+                                }
                             }
                         }
                     }
-
-                    if (!isStuck) break
                 }
+                Direction.DOWN -> {
+                    for (row in 3 downTo 0) {
+                        for (column in 0..3) {
+                            if (tiles[row][column] != Tile.NONE) {
+                                var bestRow = null as Int?
 
-                if (isStuck) {
-                    onLost()
+                                for (newRow in row + 1..3) {
+                                    if (tiles[newRow][column] == Tile.NONE || tiles[newRow][column] == tiles[row][column]) {
+                                        bestRow = newRow
+                                    } else {
+                                        break
+                                    }
+                                }
+
+                                if (bestRow != null) {
+                                    if (tiles[bestRow][column] == Tile.NONE) {
+                                        tiles[bestRow][column] = tiles[row][column]
+                                        tiles[row][column] = Tile.NONE
+                                        haveMoved = true
+                                    } else {
+                                        tiles[bestRow][column] = Tile.from(tiles[bestRow][column].value + 1)
+                                        tiles[row][column] = Tile.NONE
+                                        addScore(tiles[bestRow][column].value)
+                                        haveMoved = true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                Direction.LEFT -> {
+                    for (column in 0..3) {
+                        for (row in 0..3) {
+                            if (tiles[row][column] != Tile.NONE) {
+                                var bestColumn = null as Int?
+
+                                for (newColumn in column - 1 downTo 0) {
+                                    if (tiles[row][newColumn] == Tile.NONE || tiles[row][newColumn] == tiles[row][column]) {
+                                        bestColumn = newColumn
+                                    } else {
+                                        break
+                                    }
+                                }
+
+                                if (bestColumn != null) {
+                                    if (tiles[row][bestColumn] == Tile.NONE) {
+                                        tiles[row][bestColumn] = tiles[row][column]
+                                        tiles[row][column] = Tile.NONE
+                                        haveMoved = true
+                                    } else {
+                                        tiles[row][bestColumn] = Tile.from(tiles[row][bestColumn].value + 1)
+                                        tiles[row][column] = Tile.NONE
+                                        addScore(tiles[row][bestColumn].value)
+                                        haveMoved = true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                Direction.RIGHT -> {
+                    for (column in 3 downTo 0) {
+                        for (row in 0..3) {
+                            if (tiles[row][column] != Tile.NONE) {
+                                var bestColumn = null as Int?
+
+                                for (newColumn in column + 1..3) {
+                                    if (tiles[row][newColumn] == Tile.NONE || tiles[row][newColumn] == tiles[row][column]) {
+                                        bestColumn = newColumn
+                                    } else {
+                                        break
+                                    }
+                                }
+
+                                if (bestColumn != null) {
+                                    if (tiles[row][bestColumn] == Tile.NONE) {
+                                        tiles[row][bestColumn] = tiles[row][column]
+                                        tiles[row][column] = Tile.NONE
+                                        haveMoved = true
+                                    } else {
+                                        tiles[row][bestColumn] = Tile.from(tiles[row][bestColumn].value + 1)
+                                        tiles[row][column] = Tile.NONE
+                                        addScore(tiles[row][bestColumn].value)
+                                        haveMoved = true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (haveMoved) {
+                if (tiles.any { it.any { tile -> tile == Tile.TEN } }) {
+                    onWon()
                     return
                 }
+
+                addToRandomTile()
+
+                if (tiles.flatten().none { it == Tile.NONE}) {
+                    var isStuck = true
+
+                    for (x in 0..3) {
+                        for (y in 0..3) {
+                            if (x < 3) {
+                                if (tiles[x][y] == tiles[x + 1][y]) {
+                                    isStuck = false
+                                    break
+                                }
+                            }
+
+                            if (y < 3) {
+                                if (tiles[x][y] == tiles[x][y + 1]) {
+                                    isStuck = false
+                                    break
+                                }
+                            }
+                        }
+
+                        if (!isStuck) break
+                    }
+
+                    if (isStuck) {
+                        onLost()
+                        return
+                    }
+                }
+
+                incrementTurns()
+            }
+        }
+
+        private fun addToRandomTile() {
+            val emptyTiles = ArrayList<Pair<Int, Int>>()
+
+            for (x in 0..3) {
+                for (y in 0..3) {
+                    if (tiles[x][y] == Tile.NONE) {
+                        emptyTiles.add(Pair(x, y))
+                    }
+                }
             }
 
-            incrementTurns()
+            val (x, y) = emptyTiles.random()
+
+            tiles[x][y] = if (Random.nextInt(10) != 0) Tile.ZERO else Tile.ONE
         }
-    }
 
-    private fun addToRandomTile() {
-        val emptyTiles = ArrayList<Pair<Int, Int>>()
+        enum class Tile(val value: Int, val emoji: String) {
+            NONE(-1, ":purple_square:"),
+            ZERO(0, ":zero:"),
+            ONE(1, ":one:"),
+            TWO(2, ":two:"),
+            THREE(3, ":three:"),
+            FOUR(4, ":four:"),
+            FIVE(5, ":five:"),
+            SIX(6, ":six:"),
+            SEVEN(7, ":seven:"),
+            EIGHT(8, ":eight:"),
+            NINE(9, ":nine:"),
+            TEN(10, ":keycap_ten:");
 
-        for (x in 0..3) {
-            for (y in 0..3) {
-                if (tiles[x][y] == Tile.NONE) {
-                    emptyTiles.add(Pair(x, y))
+            companion object {
+                fun from(value: Int): Tile {
+                    return values().first { it.value == value }
                 }
             }
         }
-
-        val (x, y) = emptyTiles.random()
-
-        tiles[x][y] = if (Random.nextInt(10) != 0) Tile.ZERO else Tile.ONE
     }
-}
 
-enum class Tile(val value: Int, val emoji: String) {
-    NONE(-1, ":purple_square:"),
-    ZERO(0, ":zero:"),
-    ONE(1, ":one:"),
-    TWO(2, ":two:"),
-    THREE(3, ":three:"),
-    FOUR(4, ":four:"),
-    FIVE(5, ":five:"),
-    SIX(6, ":six:"),
-    SEVEN(7, ":seven:"),
-    EIGHT(8, ":eight:"),
-    NINE(9, ":nine:"),
-    TEN(10, ":keycap_ten:");
-
-    companion object {
-        fun from(value: Int): Tile {
-            return values().first { it.value == value }
-        }
+    enum class Direction {
+        UP, DOWN, LEFT, RIGHT
     }
-}
-
-enum class Direction {
-    UP, DOWN, LEFT, RIGHT
 }

@@ -61,10 +61,10 @@ object ChannelManager : ListenerAdapter() {
             }
 
             when (event.button.id) {
-                "up" -> game.move(Direction.UP)
-                "down" -> game.move(Direction.DOWN)
-                "left" -> game.move(Direction.LEFT)
-                "right" -> game.move(Direction.RIGHT)
+                "up" -> game.move(Game.Direction.UP)
+                "down" -> game.move(Game.Direction.DOWN)
+                "left" -> game.move(Game.Direction.LEFT)
+                "right" -> game.move(Game.Direction.RIGHT)
                 "exit" -> event.reply(createAskToExitMessage()).setEphemeral(true).queue()
                 "confirm_exit" -> event.channel.delete().queue()
             }

@@ -17,35 +17,35 @@ interface SlashCommand {
     val name: String
     val description: String
     fun onCommand(event: SlashCommandInteractionEvent)
-}
 
-object SlashCommands : ListenerAdapter() {
-    private fun reloadCommands(jda: JDA) {
-        println("Reloading commands...")
+    companion object : ListenerAdapter() {
+        private fun reloadCommands(jda: JDA) {
+            println("Reloading commands...")
 
-        jda.retrieveCommands().queue { commandsToDelete ->
-            whenAllDone(commandsToDelete, Command::delete, { }, {
-                whenAllDone(commands, {
-                    jda.upsertCommand(it.name, it.description)
-                }, { }, {
-                    println("Reloaded commands!")
+            jda.retrieveCommands().queue { commandsToDelete ->
+                whenAllDone(commandsToDelete, Command::delete, { }, {
+                    whenAllDone(commands, {
+                        jda.upsertCommand(it.name, it.description)
+                    }, { }, {
+                        println("Reloaded commands!")
+                    })
                 })
-            })
+            }
         }
-    }
 
-    override fun onMessageReceived(event: MessageReceivedEvent) {
-        val channel = event.channel
-        if (channel is PrivateChannel && channel.user?.id == Config.adminId) {
-            if (event.message.contentRaw == "reload") reloadCommands(event.jda)
+        override fun onMessageReceived(event: MessageReceivedEvent) {
+            val channel = event.channel
+            if (channel is PrivateChannel && channel.user?.id == Config.adminId) {
+                if (event.message.contentRaw == "reload") reloadCommands(event.jda)
+            }
         }
-    }
 
-    override fun onSlashCommandInteraction(event: SlashCommandInteractionEvent) {
-        for (command in commands) {
-            if (command.name == event.name) {
-                command.onCommand(event)
-                return
+        override fun onSlashCommandInteraction(event: SlashCommandInteractionEvent) {
+            for (command in commands) {
+                if (command.name == event.name) {
+                    command.onCommand(event)
+                    return
+                }
             }
         }
     }

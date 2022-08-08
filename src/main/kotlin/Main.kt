@@ -5,6 +5,6 @@ private fun main() {
     JDABuilder
         .createDefault(Config.token)
         .setActivity(Activity.playing("10 - Its 2048, but tiny!"))
-        .addEventListeners(SlashCommands, ChannelManager)
+        .addEventListeners(SlashCommand, ChannelManager)
         .build()
 }
