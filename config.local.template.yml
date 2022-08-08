@@ -1,6 +1,6 @@
-# *******************************************************************
-# Copy this file's contents into config.local.yml, and edit it to your needs
-# *******************************************************************
+# *********************************************************************************************************************
+# Copy this file's contents into config.local.yml, and edit it to your needs. environment variables are also supported.
+# *********************************************************************************************************************
 
 # The bot token
 TOKEN: BOT-TOKEN-HERE
@@ -10,3 +10,13 @@ ADMIN_ID: ADMIN-ID-HERE
 
 # A link to add the bot to a server. Optional.
 INVITE_LINK: https://discord.com/api/oauth2/authorize?client_id=1005157924492030092&permissions=395405502482&scope=bot%20applications.commands
+
+# The database URL.
+DATABASE_URL: postgres://USER:PASSWORD@HOST:PORT/DATABASE or jdbc:postgresql://HOST:PORT/DATABASE?user=USER&password=PASSWORD
+
+# Alternatively, set these values.
+DATABASE_HOST: HOST-HERE
+DATABASE_PORT: 5432
+DATABASE_NAME: DATABASE-HERE
+DATABASE_USER: USER-HERE
+DATABASE_PASSWORD: PASSWORD-HERE

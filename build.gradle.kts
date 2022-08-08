@@ -16,4 +16,5 @@ dependencies {
     implementation("net.dv8tion:JDA:5.0.0-alpha.17")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.3")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.3")
+    implementation("org.postgresql:postgresql:42.4.1")
 }
