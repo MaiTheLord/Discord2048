@@ -1,16 +1,20 @@
 import net.dv8tion.jda.api.MessageBuilder
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.ThreadChannel
+import net.dv8tion.jda.api.entities.User
+import net.dv8tion.jda.api.interactions.callbacks.IReplyCallback
 import net.dv8tion.jda.api.interactions.components.ActionRow
 import net.dv8tion.jda.api.interactions.components.buttons.Button
 import kotlin.math.pow
 import kotlin.random.Random
 
-class Game(thread: ThreadChannel) {
-    private lateinit var textMessage: Message
-    private lateinit var boardMessage: Message
+class Game(thread: ThreadChannel, user: User) {
+    private val userId = user.id
 
     private val board = Board()
+
+    private lateinit var textMessage: Message
+    private lateinit var boardMessage: Message
 
     var isOver = false
     private var score = 0
@@ -45,7 +49,7 @@ class Game(thread: ThreadChannel) {
     }
 
     private fun createGameTextMessage() = MessageBuilder()
-        .append("Welcome to 2048! *Actually, its 10, but lets ignore that :)*\n")
+        .append("**<@$userId>, Welcome to 2048**! *Actually, its 10, but lets ignore that :)*\n")
         .append("I assume you know the rules. Just press the buttons to move the tiles.\n")
         .append("The only difference between 2048 and 10 is that the number increments instead of doubles itself, and your goal is to reach 10.\n")
         .append("\n")
@@ -62,9 +66,9 @@ class Game(thread: ThreadChannel) {
 
         message.setActionRows(
             ActionRow.of(
-                Button.primary("null_0", "\u00A0"),
+                Button.secondary("null", "\u00A0"),
                 Button.primary("up", "\u25B2"),
-                Button.primary("null_1", "\u00A0"),
+                Button.danger("exit", "\u2716"),
             ),
             ActionRow.of(
                 Button.primary("left", "\u25C4"),

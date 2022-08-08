@@ -47,7 +47,7 @@ object ChannelManager : ListenerAdapter() {
             channel.createThreadChannel(THREAD_NAME, shouldCreatePrivateThread).queue {
                 threads[event.guild!!]!![event.user] = it
                 event.reply("Created <#${it.id}> for you").setEphemeral(true).queue()
-                games[it] = Pair(Game(it), event.user)
+                games[it] = Pair(Game(it, event.user), event.user)
             }
         }
 
@@ -65,9 +65,11 @@ object ChannelManager : ListenerAdapter() {
                 "down" -> game.move(Direction.DOWN)
                 "left" -> game.move(Direction.LEFT)
                 "right" -> game.move(Direction.RIGHT)
+                "exit" -> event.reply(createAskToExitMessage()).setEphemeral(true).queue()
+                "confirm_exit" -> event.channel.delete().queue()
             }
 
-            event.deferEdit().queue()
+            if (!event.isAcknowledged) event.deferEdit().queue()
         }
     }
 
@@ -107,7 +109,7 @@ object ChannelManager : ListenerAdapter() {
                 val message = MessageBuilder()
                     .append("Welcome to the $CHANNEL_NAME channel!\n")
                     .append("To play, press the button below.\n")
-                    .setActionRows(ActionRow.of(Button.primary(PLAY_BUTTON_ID, "\u25B6 Play")))
+                    .setActionRows(ActionRow.of(Button.success(PLAY_BUTTON_ID, "\u25B6 Play")))
                     .build()
 
                 it.sendMessage(message).queue()
@@ -118,4 +120,9 @@ object ChannelManager : ListenerAdapter() {
             event.reply("There are already multiple channels named \"$CHANNEL_NAME\" in this server").queue()
         }
     }
+
+    private fun createAskToExitMessage() = MessageBuilder()
+        .append("Click the button below if you really wanna to exit the game")
+        .setActionRows(ActionRow.of(Button.danger("confirm_exit", "Exit")))
+        .build()
 }
