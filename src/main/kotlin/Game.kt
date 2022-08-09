@@ -93,13 +93,15 @@ class Game(thread: ThreadChannel, user: User) {
 
             when (direction) {
                 Direction.UP -> {
+                    val merged = ArrayList<Pair<Int, Int>>()
+
                     for (row in 0..3) {
                         for (column in 0..3) {
                             if (tiles[row][column] != Tile.NONE) {
                                 var bestRow = null as Int?
 
                                 for (newRow in row - 1 downTo 0) {
-                                    if (tiles[newRow][column] == Tile.NONE || tiles[newRow][column] == tiles[row][column]) {
+                                    if (tiles[newRow][column] == Tile.NONE || (tiles[newRow][column] == tiles[row][column] && !merged.contains(Pair(newRow, column)))) {
                                         bestRow = newRow
                                     } else {
                                         break
@@ -114,6 +116,7 @@ class Game(thread: ThreadChannel, user: User) {
                                     } else {
                                         tiles[bestRow][column] = Tile.from(tiles[bestRow][column].value + 1)
                                         tiles[row][column] = Tile.NONE
+                                        merged.add(Pair(bestRow, column))
                                         addScore(tiles[bestRow][column].value)
                                         haveMoved = true
                                     }
@@ -123,13 +126,15 @@ class Game(thread: ThreadChannel, user: User) {
                     }
                 }
                 Direction.DOWN -> {
+                    val merged = ArrayList<Pair<Int, Int>>()
+
                     for (row in 3 downTo 0) {
                         for (column in 0..3) {
                             if (tiles[row][column] != Tile.NONE) {
                                 var bestRow = null as Int?
 
                                 for (newRow in row + 1..3) {
-                                    if (tiles[newRow][column] == Tile.NONE || tiles[newRow][column] == tiles[row][column]) {
+                                    if (tiles[newRow][column] == Tile.NONE || (tiles[newRow][column] == tiles[row][column] && !merged.contains(Pair(newRow, column)))) {
                                         bestRow = newRow
                                     } else {
                                         break
@@ -144,6 +149,7 @@ class Game(thread: ThreadChannel, user: User) {
                                     } else {
                                         tiles[bestRow][column] = Tile.from(tiles[bestRow][column].value + 1)
                                         tiles[row][column] = Tile.NONE
+                                        merged.add(Pair(bestRow, column))
                                         addScore(tiles[bestRow][column].value)
                                         haveMoved = true
                                     }
@@ -153,13 +159,15 @@ class Game(thread: ThreadChannel, user: User) {
                     }
                 }
                 Direction.LEFT -> {
+                    val merged = ArrayList<Pair<Int, Int>>()
+
                     for (column in 0..3) {
                         for (row in 0..3) {
                             if (tiles[row][column] != Tile.NONE) {
                                 var bestColumn = null as Int?
 
                                 for (newColumn in column - 1 downTo 0) {
-                                    if (tiles[row][newColumn] == Tile.NONE || tiles[row][newColumn] == tiles[row][column]) {
+                                    if (tiles[row][newColumn] == Tile.NONE || (tiles[row][newColumn] == tiles[row][column] && !merged.contains(Pair(row, newColumn)))) {
                                         bestColumn = newColumn
                                     } else {
                                         break
@@ -174,6 +182,7 @@ class Game(thread: ThreadChannel, user: User) {
                                     } else {
                                         tiles[row][bestColumn] = Tile.from(tiles[row][bestColumn].value + 1)
                                         tiles[row][column] = Tile.NONE
+                                        merged.add(Pair(row, bestColumn))
                                         addScore(tiles[row][bestColumn].value)
                                         haveMoved = true
                                     }
@@ -183,13 +192,15 @@ class Game(thread: ThreadChannel, user: User) {
                     }
                 }
                 Direction.RIGHT -> {
+                    val merged = ArrayList<Pair<Int, Int>>()
+
                     for (column in 3 downTo 0) {
                         for (row in 0..3) {
                             if (tiles[row][column] != Tile.NONE) {
                                 var bestColumn = null as Int?
 
                                 for (newColumn in column + 1..3) {
-                                    if (tiles[row][newColumn] == Tile.NONE || tiles[row][newColumn] == tiles[row][column]) {
+                                    if (tiles[row][newColumn] == Tile.NONE || (tiles[row][newColumn] == tiles[row][column] && !merged.contains(Pair(row, newColumn)))) {
                                         bestColumn = newColumn
                                     } else {
                                         break
@@ -204,6 +215,7 @@ class Game(thread: ThreadChannel, user: User) {
                                     } else {
                                         tiles[row][bestColumn] = Tile.from(tiles[row][bestColumn].value + 1)
                                         tiles[row][column] = Tile.NONE
+                                        merged.add(Pair(row, bestColumn))
                                         addScore(tiles[row][bestColumn].value)
                                         haveMoved = true
                                     }
