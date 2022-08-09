@@ -4,12 +4,11 @@ import net.dv8tion.jda.api.entities.ThreadChannel
 import net.dv8tion.jda.api.entities.User
 import net.dv8tion.jda.api.interactions.components.ActionRow
 import net.dv8tion.jda.api.interactions.components.buttons.Button
+import kotlin.concurrent.thread
 import kotlin.math.pow
 import kotlin.random.Random
 
-class Game(thread: ThreadChannel, user: User) {
-    private val userId = user.id
-
+class Game(thread: ThreadChannel, private val user: User) {
     private val board = Board()
 
     private lateinit var textMessage: Message
@@ -35,6 +34,9 @@ class Game(thread: ThreadChannel, user: User) {
         if (isOver) return
         board.move(direction,  { score += 2.toDouble().pow(it + 1).toInt() }, { turn++ }, ::onWin, ::onLose)
         refreshMessages()
+        thread {
+            Database.InsertIntoLeaderboard.execute(user, boardMessage.guild, score, if (isOver) turn else turn - 1)
+        }
     }
 
     private fun onWin() {
@@ -48,7 +50,7 @@ class Game(thread: ThreadChannel, user: User) {
     }
 
     private fun createGameTextMessage() = MessageBuilder()
-        .append("**<@$userId>, Welcome to 2048**! *Actually, its 10, but lets ignore that :)*\n")
+        .append("**<@${user.id}>, Welcome to 2048!** *Actually, its 10, but lets ignore that :)*\n")
         .append("I assume you know the rules. Just press the buttons to move the tiles.\n")
         .append("The only difference between 2048 and 10 is that the number increments instead of doubles itself, and your goal is to reach 10.\n")
         .append("\n")
